@@ -19,7 +19,10 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install dependencies
+      - name: Install app dependencies (Flask)
+        run: pip install flask
+
+      - name: Install test dependencies
         run: pip install -r tests/requirements.txt
 
       - name: Set up Chrome
@@ -28,8 +31,12 @@ jobs:
       - name: Start Flask app in background
         run: |
           cd app
-          nohup python app.py &
+          nohup python app.py > flask.log 2>&1 &
           sleep 3
+          cat flask.log
+
+      - name: Verify Flask app is reachable
+        run: curl -sf http://localhost:5000/login || (echo "Flask app did not respond" && exit 1)
 
       - name: Run Selenium tests
         run: pytest tests/test_login_selenium.py -v
