@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; display: flex;
+           justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .box { background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+           width: 320px; text-align: center; }
+    h1 { font-size: 20px; }
+    a { display: inline-block; margin-top: 18px; color: #2563eb; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1 id="welcome-message">Welcome, {{ username }}!</h1>
+    <p>You are logged in.</p>
+    <a href="/logout" id="logout-link">Logout</a>
+  </div>
+</body>
+</html>
