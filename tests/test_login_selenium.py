@@ -2,8 +2,9 @@
 End-to-end UI automation for the login page, using Selenium WebDriver.
 
 Requires the Flask app to be running (default http://localhost:5000).
-Requires Chrome/Chromium + a matching chromedriver on PATH (webdriver-manager
-handles this automatically).
+Requires Chrome/Chromium installed. Selenium 4.6+'s built-in driver
+manager auto-downloads the matching chromedriver, so no manual setup
+is needed.
 
 Run with:
     pytest tests/test_login_selenium.py -v
@@ -16,22 +17,23 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
 
 BASE_URL = os.environ.get("BASE_URL", "http://localhost:5000")
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def driver():
     options = Options()
-   #options.add_argument("--headless=new")
+    options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1280,800")
 
-    service = Service(ChromeDriverManager().install())
-    drv = webdriver.Chrome(service=service, options=options)
+    # Selenium 4.6+ has a built-in driver manager that auto-detects
+    # the correct chromedriver for whatever Chrome is installed,
+    # so no explicit Service()/webdriver-manager needed.
+    drv = webdriver.Chrome(options=options)
     drv.implicitly_wait(3)
     yield drv
     drv.quit()
